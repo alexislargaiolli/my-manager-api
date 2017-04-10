@@ -16,34 +16,47 @@
 
 module.exports.policies = {
 
-  /***************************************************************************
-  *                                                                          *
-  * Default policy for all controllers and actions (`true` allows public     *
-  * access)                                                                  *
-  *                                                                          *
-  ***************************************************************************/
+    /***************************************************************************
+     *                                                                          *
+     * Default policy for all controllers and actions (`true` allows public     *
+     * access)                                                                  *
+     *                                                                          *
+     ***************************************************************************/
 
-  // '*': true,
+    '*': ['isAuthenticated'],
+    'UserController': {
+        '*': ['isAuthenticated', 'isAdmin'],
+        'findOne': ['isAuthenticated', 'isMe'],
+        'authenticate': true,
+        'authenticated': true,
+        'register': true,
+    },
 
-  /***************************************************************************
-  *                                                                          *
-  * Here's an example of mapping some policies to run before a controller    *
-  * and its actions                                                          *
-  *                                                                          *
-  ***************************************************************************/
-  // UserController: {
-  //
-  //   // We might mandate that requests come from a logged-in user for
-  //   // most actions in this controller.
-  //   '*': 'isLoggedIn',
-  //
-  //   // But we'll let anyone access the 'login' and 'signup' actions
-  //   login: true,
-  //   signup: true,
-  //
-  //   // And we'll only let admins delete users.
-  //   destroy: 'isAdmin',
-  //
-  // },
+    'ProjectController': {
+        '*': ['isAuthenticated', 'isAdmin'],
+        'find': ['isAuthenticated', 'userProject'],
+        'create': ['isAuthenticated', 'isMe']
+    }
+
+    /***************************************************************************
+     *                                                                          *
+     * Here's an example of mapping some policies to run before a controller    *
+     * and its actions                                                          *
+     *                                                                          *
+     ***************************************************************************/
+    // UserController: {
+    //
+    //   // We might mandate that requests come from a logged-in user for
+    //   // most actions in this controller.
+    //   '*': 'isLoggedIn',
+    //
+    //   // But we'll let anyone access the 'login' and 'signup' actions
+    //   login: true,
+    //   signup: true,
+    //
+    //   // And we'll only let admins delete users.
+    //   destroy: 'isAdmin',
+    //
+    // },
 
 };

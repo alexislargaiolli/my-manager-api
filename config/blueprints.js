@@ -12,61 +12,79 @@
 
 module.exports.blueprints = {
 
-  /***************************************************************************
-  *                                                                          *
-  * Automatically expose implicit routes for every action in your app?       *
-  *                                                                          *
-  ***************************************************************************/
+    parseBlueprintOptions: function(req) {
 
-  // actions: false,
+        // Get the default query options.
+        var queryOptions = req._sails.hooks.blueprints.parseBlueprintOptions(req);
 
+        // If this is the "find" or "populate" blueprint action, and the normal query options
+        // indicate that the request is attempting to set an exceedingly high `limit` clause,
+        // then prevent it (we'll say `limit` must not exceed 100).
+        if (req.options.blueprintAction === 'find' || req.options.blueprintAction === 'populate') {
+            if (queryOptions.criteria.limit > 100) {
+                queryOptions.criteria.limit = 100;
+            }
+        }
+        queryOptions.populates = {};
+        return queryOptions;
 
-  /***************************************************************************
-  *                                                                          *
-  * Automatically expose RESTful routes for your models?                     *
-  *                                                                          *
-  ***************************************************************************/
+    }
 
-  // rest: true,
+    /***************************************************************************
+     *                                                                          *
+     * Automatically expose implicit routes for every action in your app?       *
+     *                                                                          *
+     ***************************************************************************/
 
-
-  /***************************************************************************
-  *                                                                          *
-  * Automatically expose CRUD "shortcut" routes to GET requests?             *
-  * (These are enabled by default in development only.)                      *
-  *                                                                          *
-  ***************************************************************************/
-
-  // shortcuts: true,
-
-
-  /***************************************************************************
-  *                                                                          *
-  * Optional mount path prefix for all implicit blueprint routes ("shadows") *
-  *                                                                          *
-  ***************************************************************************/
-
-  // prefix: '',
+    // actions: false,
 
 
-  /***************************************************************************
-  *                                                                          *
-  * Whether to use plural model names in blueprint routes                    *
-  * (e.g. `/users` for the `User` model)                                     *
-  *                                                                          *
-  ***************************************************************************/
+    /***************************************************************************
+     *                                                                          *
+     * Automatically expose RESTful routes for your models?                     *
+     *                                                                          *
+     ***************************************************************************/
 
-  // pluralize: false,
+    // rest: true,
 
 
-  /***************************************************************************
-  *                                                                          *
-  * Automatically enroll sockets requesting the `find` blueprint action to   *
-  * receive special notifications about any new records for the same model.  *
-  * (Only notifies for records created with the `create` blueprint action.)  *
-  *                                                                          *
-  ***************************************************************************/
+    /***************************************************************************
+     *                                                                          *
+     * Automatically expose CRUD "shortcut" routes to GET requests?             *
+     * (These are enabled by default in development only.)                      *
+     *                                                                          *
+     ***************************************************************************/
 
-  // autoWatch: true,
+    // shortcuts: true,
+
+
+    /***************************************************************************
+     *                                                                          *
+     * Optional mount path prefix for all implicit blueprint routes ("shadows") *
+     *                                                                          *
+     ***************************************************************************/
+
+    // prefix: '',
+
+
+    /***************************************************************************
+     *                                                                          *
+     * Whether to use plural model names in blueprint routes                    *
+     * (e.g. `/users` for the `User` model)                                     *
+     *                                                                          *
+     ***************************************************************************/
+
+    // pluralize: false,
+
+
+    /***************************************************************************
+     *                                                                          *
+     * Automatically enroll sockets requesting the `find` blueprint action to   *
+     * receive special notifications about any new records for the same model.  *
+     * (Only notifies for records created with the `create` blueprint action.)  *
+     *                                                                          *
+     ***************************************************************************/
+
+    // autoWatch: true,
 
 };
